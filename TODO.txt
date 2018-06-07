@@ -1,0 +1,9 @@
+--Codice
+1) Aggiungere un sistema di logging
+2) Aggiungere DAOException
+
+--Funzionalità
+1) Aggiungere effetti:
+   a) Cambiare width
+   b) Cambiare envelope
+   c) Portamento up / down
