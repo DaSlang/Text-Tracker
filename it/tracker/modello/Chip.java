@@ -1,6 +1,5 @@
 package it.tracker.modello;
 
-import it.tracker.modello.Canale;
 import it.tracker.Costanti;
 import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;

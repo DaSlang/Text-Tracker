@@ -1,8 +1,5 @@
 package it.tracker.modello;
 
-import com.jsyn.unitgen.*;
-
-import it.tracker.modello.Nota;
 import it.tracker.Costanti;
 import com.jsyn.unitgen.PulseOscillator;
 import com.jsyn.unitgen.TriangleOscillator;
@@ -10,6 +7,8 @@ import com.jsyn.unitgen.UnitGenerator;
 import com.jsyn.unitgen.WhiteNoise;
 import com.jsyn.unitgen.LineOut;
 import com.jsyn.unitgen.VariableRateMonoReader;
+import com.jsyn.unitgen.UnitOscillator;
+import com.jsyn.unitgen.FilterLowPass;
 import com.jsyn.data.SegmentedEnvelope; 
 import java.util.List;
 import java.util.ArrayList;

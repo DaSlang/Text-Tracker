@@ -4,69 +4,72 @@ import it.tracker.Costanti;
 import it.tracker.modello.*;
 import com.jsyn.unitgen.PulseOscillator;
 import com.jsyn.unitgen.TriangleOscillator;
-import com.jsyn.unitgen.WhiteNoise;
 import com.jsyn.unitgen.RedNoise;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.*;
 
 public class DAOChip {
 
-	private static final String fileFrequenze = "P:/Java/Text Tracker/Frequenza Note.txt";
-	private static final String fileProva = "P:/Java/Text Tracker/Noise Hit.txt";
+	private static final String fileFrequenze = "D:/Dario/Text Tracker/Frequenza Note.txt";
+	private static final String fileProva = "D:/Dario/Text Tracker/Rain.txt";
+
+	private static final Logger logger = LoggerFactory.getLogger(DAOChip.class);
 
 	private DAOChip(){}
 
 	public static Chip caricaChip() {
 		Map<String, Double> mappaFrequenze = caricaMappaFrequenze();
-		BufferedReader outStream = null;
+		BufferedReader inStream = null;
 		Chip chip = null;
 		try {
-			outStream = new BufferedReader(new FileReader(fileProva));
-			chip = leggiInfo(outStream);
-			//System.out.println(chip.getBpm() + " " + chip.getDurata());
-			String linea = outStream.readLine();
-			//System.out.println(linea);
+			inStream = new BufferedReader(new FileReader(fileProva));
+			chip = leggiInfo(inStream);
+			logger.debug(chip.getBpm() + " " + chip.getDurata());
+			String linea = inStream.readLine();
+			logger.debug(linea);
 			inizializzaCanali(linea, chip);
-			while ((linea = outStream.readLine()) != null) {
+			while ((linea = inStream.readLine()) != null) {
 				leggiLinea(linea, chip, mappaFrequenze);	
 			}
 		} catch(IOException ioe) {
-			System.out.println(ioe);
+			logger.error(ioe.toString());
 		}
 		return chip;
 	}
 
 	private static Map<String, Double> caricaMappaFrequenze() {
 		Map<String, Double> mappa = new HashMap<String, Double>();
-		BufferedReader outStream = null;
+		BufferedReader inStream = null;
 		try {
-			outStream = new BufferedReader(new FileReader(fileFrequenze));
+			inStream = new BufferedReader(new FileReader(fileFrequenze));
 			String linea = null;
-			while ((linea = outStream.readLine()) != null) {
-				mappa.put(linea, Double.parseDouble(outStream.readLine()));
+			while ((linea = inStream.readLine()) != null) {
+				mappa.put(linea, Double.parseDouble(inStream.readLine()));
 			}
 		} catch(IOException ioe) {
-			System.out.println(ioe);
+			logger.error(ioe.toString());
 		} finally {
-			if (outStream != null) {
+			if (inStream != null) {
 				try {
-					outStream.close();
+					inStream.close();
 				} catch(IOException ioe){}
 			}
 		}
 		return mappa;
 	}
 
-	private static Chip leggiInfo(BufferedReader outStream) {
+	private static Chip leggiInfo(BufferedReader inStream) {
 		int bpm = 60;
 		int durata = 0;
 		try {
-			bpm = Integer.parseInt(outStream.readLine().split("=")[1].trim());
-			durata = Integer.parseInt(outStream.readLine().split("=")[1].trim());
-			outStream.readLine();
+			bpm = Integer.parseInt(inStream.readLine().split("=")[1].trim());
+			durata = Integer.parseInt(inStream.readLine().split("=")[1].trim());
+			inStream.readLine();
 		} catch(IOException ioe) {
-			System.out.println(ioe);
+			logger.error(ioe.toString());
 		}
 		return new Chip(bpm, durata);
 	}
@@ -74,7 +77,7 @@ public class DAOChip {
 	private static void inizializzaCanali(String linea, Chip chip) {
 		String[] tokens = linea.split(":");
 		for (int i = 0; i < tokens.length; i++) {
-			//System.out.println(tokens[i].trim());
+			logger.debug(tokens[i].trim());
 			if (tokens[i].trim().equals("pulse")) {
 				chip.aggiungiCanale(new Canale(new PulseOscillator(), Costanti.PULSE, chip.getBpm()));
 			} else if (tokens[i].trim().equals("triangle")) {
@@ -82,7 +85,7 @@ public class DAOChip {
 			} else if (tokens[i].trim().equals("noise")) {
 				chip.aggiungiCanale(new Canale(new RedNoise(), Costanti.PULSE, chip.getBpm()));
 			} else {
-				throw new IllegalArgumentException();
+				throw new IllegalArgumentException(); //Da sostituire
 			}
 		}
 	}

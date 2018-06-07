@@ -1,0 +1,2 @@
+javac -cp .;"D:/Dario/lib/jsyn.jar";"D:/Dario/lib/slf4j-api-1.7.7.jar" it/tracker/controllo/Principale.java it/tracker/modello/*.java it/tracker/Costanti.java
+java -cp .;"D:/Dario/lib/jsyn.jar";"D:/Dario/lib/slf4j-api-1.7.7.jar";"D:/Dario/lib/logback-core-1.1.2.jar";"D:/Dario/lib/logback-classic-1.1.2.jar" it.tracker.controllo.Principale
